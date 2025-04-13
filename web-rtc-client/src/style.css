@@ -23,9 +23,9 @@ a:hover {
 }
 
 body {
-  margin: 0;
-  display: flex;
+  margin: 80px 10px;
   place-items: center;
+  text-align: center;
   min-width: 320px;
   min-height: 100vh;
 }
@@ -33,13 +33,6 @@ body {
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
-}
-
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
 }
 
 .logo {
@@ -63,6 +56,19 @@ h1 {
   color: #888;
 }
 
+video {
+  width: 40vw;
+  height: 30vw;
+  margin: 2rem;
+  background: #2c3e50;
+}
+
+.videos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 button {
   border-radius: 8px;
   border: 1px solid transparent;
@@ -74,9 +80,11 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
 }
+
 button:hover {
   border-color: #646cff;
 }
+
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
