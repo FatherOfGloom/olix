@@ -1,7 +1,13 @@
 import './style.css'
 
+import { firebaseConfig } from './config/firebase.config.js'
+import { getFirestore } from 'firebase/firestore'
+
+import { initializeApp, getApps } from "firebase/app"
+
 const screenshareButton = document.getElementById('screenshareButton');
 const localVideo = document.getElementById('localVideo');
+const remoteVideo = document.getElementById('remoteVideo');
 
 const pc = new RTCPeerConnection({
   iceServers: [
@@ -9,36 +15,35 @@ const pc = new RTCPeerConnection({
   ]
 });
 
+if (!getApps().length) {
+  initializeApp(firebaseConfig);
+}
+
+const fs = getFirestore();
+
 let remoteStream = null;
+let localStream = null;
 
 screenshareButton.onclick = async () => {
   console.log("screenshare clicked");
 
-  const stream = await navigator.mediaDevices.getDisplayMedia({
+  const localStream = await navigator.mediaDevices.getDisplayMedia({
     video: true,
     audio: true
   });
 
   remoteStream = new MediaStream();
 
-  stream.getTracks().forEach(t => pc.addTrack(t, stream));
-
-  // pc.onicecandidate = ({ candidate }) => {
-  //   if (candidate) {
-  //     // signalingSend({ type: 'ice-candidate', candidate});
-  //   }
-  // }
+  localStream.getTracks().forEach(t => pc.addTrack(t, localStream));
 
   pc.ontrack = (event) => {
-    // localVideo.srcObject = event.streams[0];
     event.streams[0].getTracks().forEach((track) => {
       remoteStream.addTrack(track);
     });
   };
 
-  localVideo.srcObject = stream;
+  localVideo.srcObject = localStream;
+  remoteVideo.srcObject = remoteStream;
 
-  // const offer = await pc.createOffer();
-  // await pc.setLocalDescription(offer);
-  // signalingSend({ type: 'offer', sdp: offer.sdp });
+  screenshareButton.disabled = true;
 };
